@@ -118,7 +118,7 @@
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function makeRounds() {
-    return shuffle(ANIMALS).slice(0, 6).map(function (t) {
+    return shuffle(ANIMALS.slice()).map(function (t) {
       var others = shuffle(ANIMALS.filter(function (a) { return a.id !== t.id; })).slice(0, 2);
       return { target: t, choices: shuffle([t].concat(others)) };
     });
