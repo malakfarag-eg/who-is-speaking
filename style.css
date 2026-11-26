@@ -23,7 +23,7 @@ h1 { margin: 6px 0 10px; font-family: "Lalezar", system-ui, sans-serif; font-wei
 .note { color: var(--ink2); font-size: 16px; text-align: center; margin: 4px 0; }
 .stage { position: relative; display: grid; gap: 16px; justify-items: center; padding: 16px; border-radius: 32px; background: var(--soft); overflow: hidden; }
 .top { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 8px; }
-.stars { display: flex; gap: 2px; font-size: 28px; }
+.stars { display: flex; gap: 1px; font-size: 16px; flex: 0 1 auto; min-width: 0; }
 .stars span { display: inline-flex; } .stars svg { width: 1em; height: 1em; }
 .stars .on { animation: pop .5s both; }
 @keyframes pop { 0% { transform: scale(.2) rotate(-40deg); } 70% { transform: scale(1.4) rotate(10deg); } 100% { transform: scale(1); } }
