@@ -33,11 +33,32 @@
     a.nameSound = ASSETS['n-' + a.id];
     return a;
   });
+  function bind(list) {
+    return list.map(function (a) {
+      a.photo = ASSETS['p-' + a.id]; a.sound = ASSETS['s-' + a.id]; a.nameSound = ASSETS['n-' + a.id];
+      return a;
+    });
+  }
+  var DAILY = bind([
+    { id: 'door', name: 'خبط على الباب', alt: 'مقبض باب على شكل أسد', color: '#ff8a3d', soft: '#ffe5d1' },
+    { id: 'phone', name: 'تليفون بيرن', alt: 'تليفون أسود قديم', color: '#3b9cf0', soft: '#dcecfd' },
+    { id: 'water', name: 'مية بتنزل', alt: 'مية بتنزل من حنفية', color: '#34b36b', soft: '#d9f5e3' },
+    { id: 'horn', name: 'كلاكس', alt: 'عربية حمرا', color: '#f2475f', soft: '#ffdfe4' },
+    { id: 'clap', name: 'تصفيق', alt: 'إيدين بتصفق', color: '#9b6dff', soft: '#ece3ff' },
+    { id: 'bell', name: 'جرس', alt: 'إيد ماسكة جرس', color: '#f2b705', soft: '#fff3c4' }
+  ]);
+  var PEOPLE = bind([
+    { id: 'man', name: 'راجل', alt: 'رسمة راجل', color: '#3b9cf0', soft: '#dcecfd' },
+    { id: 'woman', name: 'ست', alt: 'رسمة ست', color: '#f2475f', soft: '#ffdfe4' },
+    { id: 'girl', name: 'بنت', alt: 'رسمة بنت', color: '#ff8a3d', soft: '#ffe5d1' },
+    { id: 'boy', name: 'ولد', alt: 'رسمة ولد', color: '#34b36b', soft: '#d9f5e3' },
+    { id: 'baby', name: 'بيبي', alt: 'رسمة بيبي', color: '#9b6dff', soft: '#ece3ff' }
+  ]);
 
   var SECTIONS = [
-    { id: 'animals', title: 'حيوانات', color: '#34b36b', icon: ICONS.cow, ready: true },
-    { id: 'daily', title: 'إيه الصوت ده؟', color: '#3b9cf0', icon: ICONS.door, ready: false },
-    { id: 'people', title: 'مين بيكلمني؟', color: '#ff8a3d', icon: ICONS.people, ready: false }
+    { id: 'animals', title: 'حيوانات', color: '#34b36b', icon: ICONS.cow, ready: true, items: ANIMALS, count: '12 حيوانات', finish: 'برافو! عرفتي الحيوانات كلها' },
+    { id: 'daily', title: 'إيه الصوت ده؟', color: '#3b9cf0', icon: ICONS.door, ready: true, items: DAILY, count: '6 أصوات', finish: 'برافو! عرفتي الأصوات كلها' },
+    { id: 'people', title: 'مين بيكلمني؟', color: '#ff8a3d', icon: ICONS.people, ready: true, items: PEOPLE, count: '5 أصوات', finish: 'برافو! عرفتي كل الأصوات' }
   ];
 
   // ---- Audio: Web Audio first (unlocked by a tap), plain <audio> as backup ----
@@ -117,9 +138,9 @@
   var app = document.getElementById('app');
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function makeRounds() {
-    return shuffle(ANIMALS.slice()).map(function (t) {
-      var others = shuffle(ANIMALS.filter(function (a) { return a.id !== t.id; })).slice(0, 2);
+  function makeRounds(items) {
+    return shuffle(items.slice()).map(function (t) {
+      var others = shuffle(items.filter(function (a) { return a.id !== t.id; })).slice(0, 2);
       return { target: t, choices: shuffle([t].concat(others)) };
     });
   }
@@ -135,11 +156,11 @@
     if (SHOW_SUBTITLE) app.appendChild(el('p', 'sub', 'اسمع الصوت واختار الصورة الصح'));
     var menu = el('div', 'menu');
     SECTIONS.forEach(function (s) {
-      var b = el('button', 'section', '<span class="ic">' + s.icon + '</span><span><strong>' + s.title + '</strong><small>' + (s.ready ? ANIMALS.length + ' حيوانات' : 'قريباً') + '</small></span>');
+      var b = el('button', 'section', '<span class="ic">' + s.icon + '</span><span><strong>' + s.title + '</strong><small>' + (s.ready ? s.count : 'قريباً') + '</small></span>');
       b.type = 'button';
       b.style.setProperty('--c', s.color);
       b.disabled = !s.ready;
-      b.addEventListener('click', function () { unlockAudio(); startGame(); });
+      b.addEventListener('click', function () { unlockAudio(); startGame(s); });
       menu.appendChild(b);
     });
     app.appendChild(menu);
@@ -149,13 +170,14 @@
     app.appendChild(about);
   }
 
-  function startGame() {
-    var rounds = makeRounds(), index = 0, stars = 0, solved = false;
+  function startGame(sec) {
+    var items = sec.items;
+    var rounds = makeRounds(items), index = 0, stars = 0, solved = false;
     function render() {
       stopAudio();
       app.innerHTML = '';
       if (index >= rounds.length) return renderFinish();
-      var round = rounds[index], palette = ANIMALS[index % ANIMALS.length];
+      var round = rounds[index], palette = items[index % items.length];
       var stage = el('div', 'stage'); theme(stage, palette);
       var top = el('div', 'top');
       var back = el('button', 'btn small', 'القائمة'); back.type = 'button'; back.addEventListener('click', showHome);
@@ -211,12 +233,12 @@
       play(round.target.sound, null, true);
     }
     function renderFinish() {
-      var stage = el('div', 'stage finish'); theme(stage, ANIMALS[0]);
+      var stage = el('div', 'stage finish'); theme(stage, items[0]);
       stage.appendChild(el('div', 'trophy', ICONS.trophy));
-      stage.appendChild(el('p', 'big', 'برافو! عرفتي الحيوانات كلها'));
+      stage.appendChild(el('p', 'big', sec.finish));
       var st = el('div', 'stars'); rounds.forEach(function () { st.appendChild(el('span', 'on', ICONS.star(true))); }); stage.appendChild(st);
       var row = el('div', 'row');
-      var again = el('button', 'btn primary', 'نلعب تاني'); again.type = 'button'; again.addEventListener('click', startGame);
+      var again = el('button', 'btn primary', 'نلعب تاني'); again.type = 'button'; again.addEventListener('click', function () { startGame(sec); });
       var menu = el('button', 'btn', 'القائمة'); menu.type = 'button'; menu.addEventListener('click', showHome);
       row.appendChild(again); row.appendChild(menu); stage.appendChild(row);
       app.appendChild(stage);
