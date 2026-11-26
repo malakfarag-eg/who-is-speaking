@@ -1,4 +1,4 @@
-const CACHE = 'who-is-speaking-v7';
+const CACHE = 'who-is-speaking-v8';
 const FILES = ['./', 'index.html', 'style.css', 'app.js', 'manifest.webmanifest', 'assets1.js', 'assets2.js', 'assets3.js', 'assets4.js', 'assets5.js', 'assets6.js', 'assets7.js', 'assets8.js', 'assets9.js', 'assets10.js', 'assets11.js', 'assets12.js', 'assets13.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
