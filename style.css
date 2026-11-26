@@ -1,4 +1,4 @@
-:root { --ink: #3a2a26; --ink2: #7a6a66; --page: #fffaf0; }
+:root { --ink: #3a2a26; --ink2: #7a6a66; --page: #cfeaff; }
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; background: var(--page); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", "Noto Naskh Arabic", Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; }
@@ -65,3 +65,16 @@ dialog h2 { margin: 0 0 8px; }
 dialog form { margin-top: 12px; text-align: center; }
 @media (prefers-reduced-motion: reduce) { .deco span, .waves i, .confetti span { animation: none; } }
 .section > span:last-child { flex: 1; min-width: 0; } .section strong { white-space: nowrap; }
+
+html { background: #cfeaff; }
+body { min-height: 100vh; background-color: #cfeaff;
+ background-image:
+  radial-gradient(ellipse 60px 22px at 330px 700px, rgba(255,255,255,.85) 98%, transparent),
+  radial-gradient(ellipse 90px 30px at 370px 692px, rgba(255,255,255,.85) 98%, transparent),
+  radial-gradient(ellipse 60px 22px at 300px 240px, rgba(255,255,255,.7) 98%, transparent),
+  radial-gradient(ellipse 90px 30px at 340px 232px, rgba(255,255,255,.7) 98%, transparent),
+  radial-gradient(ellipse 70px 24px at 60px 520px, rgba(255,255,255,.7) 98%, transparent),
+  radial-gradient(ellipse 100px 32px at 105px 512px, rgba(255,255,255,.7) 98%, transparent),
+  linear-gradient(#b9e0fb, #e3f4ff);
+ background-attachment: fixed; }
+.sub, .note { color: #2f4a5f; }
