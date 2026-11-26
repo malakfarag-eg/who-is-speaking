@@ -20,7 +20,13 @@
     { id: 'cow', name: 'بقرة', alt: 'بقرة بالأبيض والأسود واقفة في مرعى أخضر', color: '#34b36b', soft: '#d9f5e3' },
     { id: 'sheep', name: 'خروف', alt: 'وجه خروف بأذنين طويلتين', color: '#9b6dff', soft: '#ece3ff' },
     { id: 'horse', name: 'حصان', alt: 'رأس حصان أبيض', color: '#3b9cf0', soft: '#dcecfd' },
-    { id: 'rooster', name: 'ديك', alt: 'رأس ديك بعرف أحمر', color: '#f2475f', soft: '#ffdfe4' }
+    { id: 'rooster', name: 'ديك', alt: 'رأس ديك بعرف أحمر', color: '#f2475f', soft: '#ffdfe4' },
+    { id: 'lion', name: 'أسد', alt: 'وجه أسد بعرف ذهبي', color: '#f2b705', soft: '#fff3c4' },
+    { id: 'elephant', name: 'فيل', alt: 'فيل رمادي بنابين', color: '#3b9cf0', soft: '#dcecfd' },
+    { id: 'donkey', name: 'حمار', alt: 'حمار رمادي يأكل العشب', color: '#9b6dff', soft: '#ece3ff' },
+    { id: 'duck', name: 'بطة', alt: 'بطة برأس أخضر على الماء', color: '#34b36b', soft: '#d9f5e3' },
+    { id: 'bird', name: 'عصفور', alt: 'عصفور صغير على جذع شجرة', color: '#ff8a3d', soft: '#ffe5d1' },
+    { id: 'frog', name: 'ضفدع', alt: 'ضفدع أخضر على خلفية بيضاء', color: '#f2475f', soft: '#ffdfe4' }
   ].map(function (a) {
     a.photo = ASSETS['p-' + a.id];
     a.sound = ASSETS['s-' + a.id];
@@ -112,7 +118,7 @@
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function makeRounds() {
-    return shuffle(ANIMALS).map(function (t) {
+    return shuffle(ANIMALS).slice(0, 6).map(function (t) {
       var others = shuffle(ANIMALS.filter(function (a) { return a.id !== t.id; })).slice(0, 2);
       return { target: t, choices: shuffle([t].concat(others)) };
     });
